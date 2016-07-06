@@ -12,7 +12,7 @@ Trending quotes
 
 @if (! empty(Request::segment(1)))
 <div class="alert alert-warning">
-  Filter set! <a href="{{route('index')}}">Show all quotes</a>
+  <a href="{{route('index')}}">Show all quotes</a>
 </div>
 @endif
 
@@ -23,6 +23,7 @@ Trending quotes
       @endforeach
   </div>
 @endif
+
 @if (Session::has('success'))
   <div class="alert alert-success">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -32,26 +33,33 @@ Trending quotes
     {{Session::get('success')}}
   </div>
 @endif
+
+
 <div class="row">
   <h1 align="center">Latest Quotes</h1>
   <div class="row">
 
-    @for($i=0;$i<count($quotes);$i++)
+    @for($i=1;$i<=count($quotes);$i++)
     <div class="col-xs-12 col-md-4">
       <div class="well quote">
         <div class="pull-right delete">
-          <a href="{{ route('delete', ['quote_id' => $quotes[$i]->id]) }}">&times;</a>
+          <a href="{{ route('delete', ['quote_id' => $quotes[$i-1]->id]) }}">&times;</a>
         </div><br>
         <div class="lead">
-          {{ $quotes[$i]->quote }}
+          {{ $quotes[$i-1]->quote }}
         </div>
         <div class="info">
-          <small>Created by <a href="{{route('index', $quotes[$i]->author->name)}}">
-            {{$quotes[$i]->author->name}}</a> on {{$quotes[$i]->created_at}}
+          <small>Created by <a href="{{route('index', $quotes[$i-1]->author->name)}}">
+            <strong>{{$quotes[$i-1]->author->name}}</strong></a> on {{$quotes[$i-1]->created_at}}
           </small>
         </div>
       </div>
     </div>
+    @if ($i % 3 ==0)
+    </div>
+    <div class="row">
+    @endif
+
     @endfor
 
   </div>
@@ -76,6 +84,7 @@ Trending quotes
       <button type="submit" class="btn btn-danger">Submit Quote</button>
       </div>
     </form>
+    <br><br>
   </div>
   </div>
 @endsection
